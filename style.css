@@ -66,3 +66,27 @@ button:disabled {
     margin-top: 15px;
     color: #666;
 }
+
+/* New CSS for Step 2 */
+.hidden {
+    display: none !important;
+}
+
+.upload-box {
+    margin: 30px auto;
+    padding: 30px;
+    border: 2px dashed #007bff;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    max-width: 500px;
+}
+
+#generateBtn {
+    background-color: #28a745;
+    font-size: 18px;
+    padding: 12px 25px;
+}
+
+#generateBtn:hover:not(:disabled) {
+    background-color: #218838;
+}

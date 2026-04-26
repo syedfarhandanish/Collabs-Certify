@@ -11,21 +11,38 @@
     <div class="app-container">
         <header>
             <h1>Collabs Certify</h1>
-            <p>Step 1: Upload Template & Draw Boxes</p>
         </header>
         
-        <div class="controls">
-            <input type="file" id="imageLoader" accept="image/png, image/jpeg" />
-            <button id="addBoxBtn" disabled>+ Add Box</button>
-            <button id="nextStepBtn" disabled>Next: Upload CSV ➡️</button>
+        <div id="step1">
+            <p>Step 1: Upload Template & Draw Boxes</p>
+            <div class="controls">
+                <input type="file" id="imageLoader" accept="image/png, image/jpeg" />
+                <button id="addBoxBtn" disabled>+ Add Box</button>
+                <button id="nextStepBtn" disabled>Next: Upload CSV ➡️</button>
+            </div>
+
+            <div class="canvas-container-wrapper">
+                <canvas id="certCanvas"></canvas>
+            </div>
+            
+            <div class="instructions">
+                <p><i>1. Upload your certificate image. 2. Click "+ Add Box" up to 3 times to create n1, n2, and n3 spaces. 3. Drag and resize them over the blank lines.</i></p>
+            </div>
         </div>
 
-        <div class="canvas-container-wrapper">
-            <canvas id="certCanvas"></canvas>
-        </div>
-        
-        <div class="instructions">
-            <p><i>1. Upload your certificate image. 2. Click "+ Add Box" up to 3 times to create n1, n2, and n3 spaces. 3. Drag and resize them over the blank lines.</i></p>
+        <div id="step2" class="hidden">
+            <p>Step 2: Upload Student Data</p>
+            
+            <div class="upload-box">
+                <p>Please upload a CSV file with columns matching your boxes (n1, n2, n3).</p>
+                <input type="file" id="csvLoader" accept=".csv" />
+            </div>
+
+            <button id="generateBtn" disabled>🚀 Generate Certificates</button>
+            
+            <div class="instructions">
+                <p><i>We have securely saved the exact positions of your signature boxes. Once your CSV is uploaded, click generate to start the batch processing.</i></p>
+            </div>
         </div>
     </div>
 
