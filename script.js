@@ -14,9 +14,11 @@ const generateBtn = document.getElementById('generateBtn');
 
 let boxCounter = 1; 
 
+// This object holds EVERYTHING to send to Python
 let certificateData = {
     templateImage: null,
-    boxes: {}
+    boxes: {},
+    students: []
 };
 
 imageLoader.addEventListener('change', function (e) {
@@ -24,7 +26,6 @@ imageLoader.addEventListener('change', function (e) {
     reader.onload = function (event) {
         const imgObj = new Image();
         imgObj.src = event.target.result;
-        
         certificateData.templateImage = event.target.result;
 
         imgObj.onload = function () {
@@ -50,8 +51,7 @@ addBoxBtn.addEventListener('click', function() {
     
     const rect = new fabric.Rect({
         left: 0, top: 0, width: 200, height: 40,
-        fill: 'rgba(0, 123, 255, 0.3)', 
-        stroke: '#007bff', strokeWidth: 2
+        fill: 'rgba(0, 123, 255, 0.3)', stroke: '#007bff', strokeWidth: 2
     });
 
     const text = new fabric.Text(boxName, {
@@ -59,15 +59,12 @@ addBoxBtn.addEventListener('click', function() {
     });
 
     const group = new fabric.Group([rect, text], {
-        left: 100 + (boxCounter * 30), 
-        top: 100 + (boxCounter * 30),
-        id: boxName, 
-        cornerColor: 'red', cornerSize: 10, transparentCorners: false
+        left: 100 + (boxCounter * 30), top: 100 + (boxCounter * 30),
+        id: boxName, cornerColor: 'red', cornerSize: 10, transparentCorners: false
     });
 
     canvas.add(group);
     canvas.setActiveObject(group);
-    
     boxCounter++; 
 });
 
@@ -90,8 +87,6 @@ nextStepBtn.addEventListener('click', function() {
         }
     });
 
-    console.log("Extracted Coordinates:", certificateData.boxes);
-
     step1Div.classList.add('hidden');
     step2Div.classList.remove('hidden');
 });
@@ -102,6 +97,42 @@ csvLoader.addEventListener('change', function(e) {
     }
 });
 
+// NEW LOGIC: Parsing the CSV and communicating with Python
 generateBtn.addEventListener('click', function() {
-    alert("In the next step, we will read the CSV and send all this data to our Python backend!");
+    const file = csvLoader.files[0];
+    if (!file) return;
+
+    generateBtn.innerText = "Processing Data...";
+    generateBtn.disabled = true;
+
+    // Read the CSV file
+    Papa.parse(file, {
+        header: true, // This tells it to use the first row (n1, n2, n3) as keys
+        skipEmptyLines: true,
+        complete: async function(results) {
+            certificateData.students = results.data;
+            
+            try {
+                // Send the massive data package to Python securely
+                const response = await fetch('/api/index', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(certificateData)
+                });
+                
+                const responseData = await response.json();
+                
+                // Show Python's response in an alert!
+                alert(responseData.message);
+                
+                generateBtn.innerText = "🚀 Generate Certificates";
+                generateBtn.disabled = false;
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to connect to the server.");
+                generateBtn.innerText = "🚀 Generate Certificates";
+                generateBtn.disabled = false;
+            }
+        }
+    });
 });
