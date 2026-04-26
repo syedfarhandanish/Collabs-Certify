@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collabs Certify</title>
+    <title>Collabs Certify - Editor</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Collabs Certify</h1>
-        <p>Before we build the certificate generator, let's test our Python connection.</p>
+    <div class="app-container">
+        <header>
+            <h1>Collabs Certify</h1>
+            <p>Step 1: Upload Template & Draw Boxes</p>
+        </header>
         
-        <button id="testBtn">Test Python Backend</button>
+        <div class="controls">
+            <input type="file" id="imageLoader" accept="image/png, image/jpeg" />
+            <button id="addBoxBtn" disabled>+ Add Box</button>
+            <button id="nextStepBtn" disabled>Next: Upload CSV ➡️</button>
+        </div>
+
+        <div class="canvas-container-wrapper">
+            <canvas id="certCanvas"></canvas>
+        </div>
         
-        <div id="statusBox" class="status-box">
-            Waiting for connection...
+        <div class="instructions">
+            <p><i>1. Upload your certificate image. 2. Click "+ Add Box" up to 3 times to create n1, n2, and n3 spaces. 3. Drag and resize them over the blank lines.</i></p>
         </div>
     </div>
 
